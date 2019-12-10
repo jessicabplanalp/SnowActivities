@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<!--
+	Escape Velocity by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+
+  <title>Expected Snowfall in North America</title>
+
+  <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/css/main.css" />
+
+<!-- leaflet CSS and JS library -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+  crossorigin=""/>
+<!-- Make sure you put this (Leaflet JS library) AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+
+<!-- the Omnivore plugin to convert KML to GeoJSON -->
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+</head>
+
+<body class="homepage is-preload">
+		<div id="page-wrapper">
+
+<!-- Header -->
+	<section id="header" class="wrapper">
+
+<!-- Logo -->
+	<div id="logo">
+	<h1><a href="index.html">Pierce Transit Bus Lines and Boundries</a></h1>
+	<p>This map uses two sources of static data to outline the service area of Pierce Transit buses as well as their current routes.</p>
+	</div>
+
+<!-- Nav -->
+	<nav id="nav">
+	<ul>
+		<li class="current"><a href="https://jessicabplanalp.github.io/portfolio/">Home</a></li>
+	<li>
+
+	<a href="#">More</a>
+	<ul>
+		<li><a href="https://abplaj.wixsite.com/jessicabplanalp/analysis">Undergraduate Projects</a></li>
+		<li><a href="https://jessicabplanalp.github.io/PierceTransit/">Pierce Transit Boundry Project</a></li>
+    <li><a href="https://jessicabplanalp.github.io/LiveEarthquakes/">Earthquakes - Live Data</a></li>
+		<li><a href="https://abplaj.wixsite.com/jessicabplanalp/resume">About Me</a></li>
+		<li><a href="https://www.tacoma.uw.edu/urban-studies/ms-program-overview">UWT MSGT Information</a></li>
+	</ul>
+	</nav>
+	</section>
+
+
+
+ <title>Pierce Transit Bus Lines and Boundries</title>
+
+
+
+
+
+
+
+
+
+		<p><center>Forcasted snowfall greater than 4 inches across North America over a 48 hour period.</center></p>
+
+<!-- the map element -->
+  <center>
+  <div id="map"style="width: 900px; height: 700px"></div>
+
+<!-- the script for my Leaflet Map -->
+  <script>
+
+
+// set up the map and remove the default zoomControl
+	var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+		subdomains: 'abcd',
+		maxZoom: 15
+	});
+
+        var map = L.map('map', {
+            zoomControl: false
+        });
+              map.addLayer(CartoDB_Positron);
+
+       var lat = 36.7783;
+        var lng = -119.4179;
+        var zoom = 6;
+// custom zoom bar control that includes a Zoom Home function
+        L.Control.zoomHome = L.Control.extend({
+            options: {
+                position: 'topright',
+                zoomInText: '+',
+                zoomInTitle: 'Zoom in',
+                zoomOutText: '-',
+                zoomOutTitle: 'Zoom out',
+                zoomHomeText: '<i class="fa fa-home" style="line-height:1.65;"></i>',
+                zoomHomeTitle: 'Zoom home'
+            },
+
+            onAdd: function (map) {
+                var controlName = 'gin-control-zoom',
+                    container = L.DomUtil.create('div', controlName + ' leaflet-bar'),
+                    options = this.options;
+
+                this._zoomInButton = this._createButton(options.zoomInText, options.zoomInTitle,
+                controlName + '-in', container, this._zoomIn);
+                this._zoomHomeButton = this._createButton(options.zoomHomeText, options.zoomHomeTitle,
+                controlName + '-home', container, this._zoomHome);
+                this._zoomOutButton = this._createButton(options.zoomOutText, options.zoomOutTitle,
+                controlName + '-out', container, this._zoomOut);
+
+                this._updateDisabled();
+                map.on('zoomend zoomlevelschange', this._updateDisabled, this);
+
+                return container;
+            },
+
+            onRemove: function (map) {
+                map.off('zoomend zoomlevelschange', this._updateDisabled, this);
+            },
+
+            _zoomIn: function (e) {
+                this._map.zoomIn(e.shiftKey ? 3 : 1);
+            },
+
+            _zoomOut: function (e) {
+                this._map.zoomOut(e.shiftKey ? 3 : 1);
+            },
+
+            _zoomHome: function (e) {
+                map.setView([lat, lng], zoom);
+            },
+
+            _createButton: function (html, title, className, container, fn) {
+                var link = L.DomUtil.create('a', className, container);
+                link.innerHTML = html;
+                link.href = '#';
+                link.title = title;
+
+                L.DomEvent.on(link, 'mousedown dblclick', L.DomEvent.stopPropagation)
+                    .on(link, 'click', L.DomEvent.stop)
+                    .on(link, 'click', fn, this)
+                    .on(link, 'click', this._refocusOnMap, this);
+
+                return link;
+            },
+
+            _updateDisabled: function () {
+                var map = this._map,
+                    className = 'leaflet-disabled';
+
+                L.DomUtil.removeClass(this._zoomInButton, className);
+                L.DomUtil.removeClass(this._zoomOutButton, className);
+
+                if (map._zoom === map.getMinZoom()) {
+                    L.DomUtil.addClass(this._zoomOutButton, className);
+                }
+                if (map._zoom === map.getMaxZoom()) {
+                    L.DomUtil.addClass(this._zoomInButton, className);
+                }
+            }
+        });
+// add the new control to the map
+    var zoomHome = new L.Control.zoomHome();
+    zoomHome.addTo(map);
+
+// load a tile layer (base map)
+            L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+              maxZoom: 18,
+
+              }).addTo(map);
+
+
+// Creating a marker
+    var marker = L.marker([47.2529, -122.4443]);
+
+// Adding marker to the map
+    marker.addTo(map);
+
+//add a KML layer
+    var datalayer = omnivore.kml('https://cors-anywhere.herokuapp.com/https://www.wpc.ncep.noaa.gov/kml/winwx/Day2_psnow_gt_04inches.kml')
+      .on('ready', function() {map.fitBounds(datalayer.getBounds());}).addTo(map);
+</script>
+
+
+</body>
+</html>
+
+<!-- Footer -->
+		 			<div id="footer">
+<!-- Copyright-->
+		 			<div class="copyright">
+		 			<ul class="menu">
+		 			<li>&copy; Jessica Abplanalp. All rights reserved.</li>
+		       <!--uncomment this if you use the template-->
+		       <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+
+					 	</center>
+		 			</ul>
+		 			</div>
+		 			</div>
+		 		  </div>
+
+<!-- Scripts -->
+		    			<script src="assets/js/jquery.min.js"></script>
+		    			<script src="assets/js/jquery.dropotron.min.js"></script>
+		    			<script src="assets/js/jquery.scrolly.min.js"></script>
+		    			<script src="assets/js/jquery.scrollex.min.js"></script>
+		    			<script src="assets/js/browser.min.js"></script>
+		    			<script src="assets/js/breakpoints.min.js"></script>
+		    			<script src="assets/js/util.js"></script>
+		    			<script src="assets/js/main.js"></script>
+		    </body>
+		    </html>
