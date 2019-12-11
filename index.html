@@ -65,7 +65,7 @@
 
 
 
- <title>Placeholder</title>
+ <title>Snowfall</title>
 
 
 
@@ -192,6 +192,9 @@
 
 // Adding marker to the map
     marker.addTo(map);
+	  
+marker.bindPopup("Tacoma, WA").openPopup();	  
+	  
 
 //add a KML layer
     var datalayer = omnivore.kml('https://cors-anywhere.herokuapp.com/https://www.wpc.ncep.noaa.gov/kml/winwx/Day2_psnow_gt_04inches.kml')
