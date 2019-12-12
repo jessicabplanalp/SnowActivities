@@ -1,38 +1,72 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <!--
 	Escape Velocity by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html>
-<head>
+  <html>
+    <head>
 
-  <title>Expected Snowfall in North America</title>
+      <meta charset="utf-8" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="assets/css/main.css" />
 
-  <meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- leaflet CSS and JS library -->
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""/>
+    <!-- Make sure you put this (Leaflet JS library) AFTER Leaflet's CSS -->
+      <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+       integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+       crossorigin=""></script>
 
-<!-- leaflet CSS and JS library -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-  crossorigin=""/>
-<!-- Make sure you put this (Leaflet JS library) AFTER Leaflet's CSS -->
-  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-   crossorigin=""></script>
+    <!-- the Omnivore plugin to convert KML to GeoJSON -->
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link href='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 
-<!-- the Omnivore plugin to convert KML to GeoJSON -->
-    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <link href='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+<!--tutorial for embedding a mapbox map into a web page as used below https://www.e-education.psu.edu/geog865/node/327 -->
 
-</head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Winter Wonderland</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" type="text/css" crossorigin="">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js" crossorigin=""></script>
+      <style>
+        #mapid {
+            width: 1000px;
+            height: 800px;
+            border: 1px solid #ccc;
+        }
+
+        .leaflet-container {
+            background: #fff;
+        }
+      </style>
+
+        <script type="text/javascript">
+          function init() {
+            // create map and set center and zoom level
+            var map = new L.map('mapid');
+            map.setView([47.7511,-120.7401],8);
+
+            var mapboxTileUrl = 'https://api.mapbox.com/styles/v1/jessicabplanalp/ck40csgbv2zrq1cryrl6ge7hz/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamVzc2ljYWJwbGFuYWxwIiwiYSI6ImNrMndvN2g0cjBoam0zYmw2eXd0bm12bTcifQ.RNICUHzCzEvRkIPxzq_RBg';
+
+            L.tileLayer(mapboxTileUrl, {
+                attribution: 'Background map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+            }).addTo(map);
+          }
+        </script>
+      </head>
+      <body onload="init()">
+        <h1 id="title">National Forest System Hiking Trails and Approved Snow Activity Areas</h1>
+        <div id="mapid"></div>
+<!-- end of https://www.e-education.psu.edu/geog865/node/327 tutorial-->
+
 
 <body class="homepage is-preload">
 		<div id="page-wrapper">
@@ -193,19 +227,17 @@
 
 // Adding marker to the map
     marker.addTo(map);
-	  
-marker.bindPopup("Tacoma, WA").openPopup();	  
-	  
+
+marker.bindPopup("Tacoma, WA").openPopup();
+
 
 //add a KML layer
     var datalayer = omnivore.kml('https://cors-anywhere.herokuapp.com/https://www.wpc.ncep.noaa.gov/kml/winwx/Day2_psnow_gt_04inches.kml')
       .on('ready', function() {map.fitBounds(datalayer.getBounds());}).addTo(map);
 </script>
-
-
 </body>
 </html>
-
+</center>
 <!-- Footer -->
 		 			<div id="footer">
 <!-- Copyright-->
@@ -215,7 +247,7 @@ marker.bindPopup("Tacoma, WA").openPopup();
 		       <!--uncomment this if you use the template-->
 		       <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 
-					 	</center>
+					 	
 		 			</ul>
 		 			</div>
 		 			</div>
